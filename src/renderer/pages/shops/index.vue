@@ -1,0 +1,19 @@
+<template>
+    <div>
+        <h3>Shops page</h3>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return {};
+    },
+
+    mounted() {},
+
+    methods: {}
+};
+</script>
+
+<style lang="scss" scoped></style>
