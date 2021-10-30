@@ -1,5 +1,5 @@
 <template>
-    <div class="category">
+    <div class="category" v-if="tableData != null">
         <el-card class="box-card">
             <el-dialog
                 title="
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <el-table :data="tableData" stripe style=" width: 100%">
+            <el-table :data="tableData" stripe style="width: 100%">
                 <el-table-column prop="name" label="Nomi"> </el-table-column>
 
                 <el-table-column>
@@ -112,7 +112,7 @@ export default {
     data() {
         return {
             ruleForm: {
-                name: ""
+                name: "",
             },
             name: "",
             rules: {
@@ -120,14 +120,14 @@ export default {
                     {
                         required: true,
                         message: "Kategoriya nomini kiriting",
-                        trigger: "blur"
-                    }
-                ]
+                        trigger: "blur",
+                    },
+                ],
             },
             editId: null,
             dialogTableVisible: false,
             isEditmodal: false,
-            tableData: null
+            tableData: null,
         };
     },
 
@@ -141,27 +141,27 @@ export default {
         },
         async openModalEdit(id) {
             console.log(id);
-            let editData = await this.$axios.$get("category/" + id);
+            let editData = await this.$axios.get("category/" + id);
             console.log("galdi ed", editData);
             this.editId = id;
             this.ruleForm.name = editData.data[0].name;
             this.isEditmodal = true;
         },
         async getData() {
-            let category = await this.$axios.$get("category/all");
-            this.tableData = category.data;
+            let category = await this.$axios.get("category/all");
+            this.tableData = category.data.data;
         },
         async create() {
             this.name = this.ruleForm.name;
             let name = await this.$axios
-                .$post("category/create", { name: this.name })
-                .then(res => {
+                .post("category/create", { name: this.name })
+                .then((res) => {
                     this.dialogTableVisible = false;
                     this.getData();
                     this.ruleForm.name = "";
                     this.$message({
                         message: "Kategoriya qo'shildi",
-                        type: "success"
+                        type: "success",
                     });
                     console.log("ok");
                 });
@@ -171,28 +171,30 @@ export default {
             this.name = this.ruleForm.name;
             console.log("id", this.name);
             let name = await this.$axios
-                .$put("category/" + this.editId, { name: this.name })
-                .then(res => {
+                .put("category/" + this.editId, { name: this.name })
+                .then((res) => {
                     this.isEditmodal = false;
                     this.getData();
                     this.ruleForm.name = "";
                     this.$message({
                         message: "Kategoriya o'zgartirildi",
-                        type: "success"
+                        type: "success",
                     });
                 });
         },
         async confirmDelete(id) {
-            let name = await this.$axios.$delete("category/" + id).then(res => {
-                this.getData();
-                this.name = "";
-                this.$message({
-                    message: "Kategoriya o'chirildi",
-                    type: "success"
+            let name = await this.$axios
+                .$delete("category/" + id)
+                .then((res) => {
+                    this.getData();
+                    this.name = "";
+                    this.$message({
+                        message: "Kategoriya o'chirildi",
+                        type: "success",
+                    });
                 });
-            });
-        }
-    }
+        },
+    },
 };
 </script>
 
